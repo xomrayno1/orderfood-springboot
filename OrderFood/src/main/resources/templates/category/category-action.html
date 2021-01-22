@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="layouts::head">
+ 
+
+</head>
+	
+<body>
+
+  <div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div th:replace="layouts::side-bar"  >
+       
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+      <nav th:replace="layouts::nav-bar" >
+ 
+      </nav>
+
+      <div class="container-fluid">
+ 			<form th:action="@{/category/save}" method="POST"	class="form-action" th:object="${submitForm}">
+					  <div class="form-group">
+					  	<input type="hidden" th:field="*{id}" class="form-control" >
+					  	<input type="hidden" th:field="*{createDate}" class="form-control" >
+					  	<input type="hidden" th:field="*{updateDate}" class="form-control" >
+					  
+					    <label for="exampleFormControlInput1">Tên danh mục :</label>
+					    <input type="text" th:field="*{name}" class="form-control" id="idInputName" placeholder="Nhập tên danh mục...">
+					     <span style="color: red"		th:if="${#fields.hasErrors('name')}" th:errors="*{name}" ></span>
+					  </div>
+		 
+					  <div class="form-group">
+					    <label for="exampleFormControlTextarea1">Chi tiết :</label>
+					    <textarea th:field="*{description}" class="form-control" id="idInputDescription" rows="3"></textarea>
+					  </div>
+					  <div class="form-group">
+					  	<button class="btn btn-success">Lưu</button>
+					  </div>
+			</form>
+       	<!-- content -->
+      </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- Bootstrap core JavaScript -->
+  <script th:src="@{/js/jquery.min.js}"></script>
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+  <!-- Menu Toggle Script -->
+  <script>
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+  </script>
+
+</body>
+
+</html>
