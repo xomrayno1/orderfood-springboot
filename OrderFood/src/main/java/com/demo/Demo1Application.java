@@ -1,11 +1,12 @@
 package com.demo;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Demo1Application {
-//https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/validation.html
+public class Demo1Application  implements CommandLineRunner{
+	//https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/validation.html
 	// fix loi can not  Error: Could not find or load main class spring boot
 	/* 
 	 * <properties>
@@ -16,4 +17,13 @@ public class Demo1Application {
 		SpringApplication.run(Demo1Application.class, args);
 	}
 
+	@Override
+	public void run(String... args) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	 
+		
+	 
 }

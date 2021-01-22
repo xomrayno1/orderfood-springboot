@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.demo.utils.Status;
 
@@ -29,15 +32,15 @@ public class Products {
 	private BigDecimal price;
 	@Enumerated
 	private Status status;
-	
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
-
 	@Temporal(TemporalType.DATE)
 	private Date createDate;
 	@Temporal(TemporalType.DATE)
 	private Date updateDate;
+	@Transient
+	private MultipartFile multipartFile;
 	
 	
 	public long getId() {
@@ -93,6 +96,12 @@ public class Products {
 	}
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+	public MultipartFile getMultipartFile() {
+		return multipartFile;
+	}
+	public void setMultipartFile(MultipartFile multipartFile) {
+		this.multipartFile = multipartFile;
 	}
 	
 	

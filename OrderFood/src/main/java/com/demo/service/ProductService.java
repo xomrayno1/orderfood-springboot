@@ -15,4 +15,6 @@ public interface ProductService {
 	Products getByName(String name);
 	List<Products> getAll();
 	Page<Products> getAll(PagingSearchFilterProduct searchFilterProduct);
+	
+	
 }

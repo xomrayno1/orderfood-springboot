@@ -53,7 +53,7 @@ public class CategoryController {
 	public String showCategory(ModelMap map,
 			@RequestParam(required = false) String keyword ,
 			@RequestParam(defaultValue = "1", required = false) int page) {
-		System.out.println(keyword + page );
+		 
 		Page<Category> pageCate = 
 					categoryService.getAll(new PagingSearchCategory(keyword,5,page - 1));
 		map.addAttribute("keyword", keyword);

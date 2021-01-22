@@ -21,6 +21,17 @@ public class Category {
 	private Date createDate;
 	@Temporal(TemporalType.DATE)
 	private Date updateDate;
+	
+	
+	
+	
+	public Category() {
+		 
+	}
+	public Category(long id) {
+		 
+		this.id = id;
+	}
 	public long getId() {
 		return id;
 	}
@@ -50,6 +61,11 @@ public class Category {
 	}
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+	@Override
+	public String toString() {
+		return "Category [id=" + id + ", name=" + name + ", description=" + description + ", createDate=" + createDate
+				+ ", updateDate=" + updateDate + "]";
 	}
 	
 	

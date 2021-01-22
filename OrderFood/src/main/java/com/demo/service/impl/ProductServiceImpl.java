@@ -1,5 +1,6 @@
 package com.demo.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,15 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public Products createProduct(Products products) {
 		// TODO Auto-generated method stub
-		 
+		products.setCreateDate(new Date());
+		products.setUpdateDate(new Date());
 		return productRepo.save(products);
 	}
 
 	@Override
 	public Products updateProduct(Products products) {
 		// TODO Auto-generated method stub
+		products.setUpdateDate(new Date());
 		return productRepo.save(products);
 	}
 
