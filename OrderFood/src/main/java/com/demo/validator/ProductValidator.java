@@ -8,6 +8,7 @@ import org.springframework.validation.Validator;
 
 import com.demo.entity.Products;
 import com.demo.service.ProductService;
+import com.demo.utils.Constant;
 
 @Component
 public class ProductValidator implements Validator{
@@ -37,6 +38,9 @@ public class ProductValidator implements Validator{
 						errors.rejectValue("name", "error.exists");
 					}			
 				}
+				if(!products.getName().matches(Constant.REGEX_NAME_PRODUCT)) {
+					errors.rejectValue("name", "error.format");
+				}
 			}
 //			if(products.getCategory() != null) {
 //				if(products.getCategory().getId() ==  0) {
@@ -45,10 +49,15 @@ public class ProductValidator implements Validator{
 //			} 
 			if(products.getCategory() == null) {	
 				errors.rejectValue("category", "error.required");
-			} 
-		}
+			}
+//			if(products.getPrice() != null) {
+//				if(!products.getPrice().toString().matches(Constant.REGEX_PRICE)) {
+//					errors.rejectValue("price", "error.format");
+//				 
+//				}
+//			}
 		
 		
 	}
-
+  }
 }

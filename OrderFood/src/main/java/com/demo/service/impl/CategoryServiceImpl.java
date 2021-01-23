@@ -1,5 +1,6 @@
 package com.demo.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,15 @@ public class CategoryServiceImpl implements CategoryService{
 	@Override
 	public Category createCategory(Category category) {
 		// TODO Auto-generated method stub
+		category.setCreateDate(new Date());
+		category.setUpdateDate(new Date());
 		return cateRepo.save(category);
 	}
 
 	@Override
 	public Category updateCategory(Category category) {
 		// TODO Auto-generated method stub
+		category.setUpdateDate(new Date());
 		return cateRepo.save(category);
 	}
 

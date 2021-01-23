@@ -29,6 +29,7 @@
 					  	<input type="hidden" th:field="*{id}" class="form-control" >
 					  	<input type="hidden" th:field="*{createDate}" class="form-control" >
 					  	<input type="hidden" th:field="*{updateDate}" class="form-control" >
+					  	<input type="hidden" th:field="*{images}" class="form-control" >
 					    <label for="name">Tên sản phẩm :</label>
 					    <input type="text" th:field="*{name}" class="form-control"   placeholder="Nhập tên sản phẩm...">
 					     <span style="color: red"		th:if="${#fields.hasErrors('name')}" th:errors="*{name}" ></span>
@@ -57,7 +58,7 @@
 					   <div class="form-group">
 					    <label for="categoryId">Tình trạng  :</label>
 					     <select th:field="*{Status}" class="form-control">
-					    	<!--  <option value="0">Chọn danh mục</option> -->
+					    	 
 					    	 <option th:each="item : ${T(com.demo.utils.Status).values()}" 
 					    			 th:value="${item}" 
 					    			 th:text="${item.message}"></option>
@@ -77,6 +78,7 @@
   <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
  
   <script>
+  $("#sidebar_product").addClass("select").siblings().removeClass("select");
     $("#menu-toggle").click(function(e) {
       e.preventDefault();
       $("#wrapper").toggleClass("toggled");

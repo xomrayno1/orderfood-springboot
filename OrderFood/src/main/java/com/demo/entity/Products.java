@@ -1,5 +1,6 @@
 package com.demo.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -14,21 +15,26 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.demo.utils.Status;
 
 @Entity
-public class Products {
-
+public class Products implements  Serializable{
+ 
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Size(min = 3)
 	private String name;
 	private String images;
 	@Column(columnDefinition = "TEXT")
 	private String description;
+	
+	//@Pattern(regexp = Constant.REGEX_PRICE , message =  "input is in incorrect format")
 	private BigDecimal price;
 	@Enumerated
 	private Status status;
@@ -102,6 +108,12 @@ public class Products {
 	}
 	public void setMultipartFile(MultipartFile multipartFile) {
 		this.multipartFile = multipartFile;
+	}
+	@Override
+	public String toString() {
+		return "Products [id=" + id + ", name=" + name + ", images=" + images + ", description=" + description
+				+ ", price=" + price + ", status=" + status + ", category=" + category + ", createDate=" + createDate
+				+ ", updateDate=" + updateDate + ", multipartFile=" + multipartFile + "]";
 	}
 	
 	

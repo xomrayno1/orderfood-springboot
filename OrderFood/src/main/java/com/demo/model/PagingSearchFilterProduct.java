@@ -1,29 +1,38 @@
 package com.demo.model;
 
+import com.demo.utils.Status;
+
 public class PagingSearchFilterProduct{
-	private String searchName;
-	private long cateId;
-	private int pageSize;
-	private int pageNumber;
+	private String keyword ;
+	private long cateId ;
+	private Status status ;
+	private int pageSize = 5;
+	private int page  ;
 	
 	
 	
 	public PagingSearchFilterProduct() {
 		 
 	}
-	public PagingSearchFilterProduct(String searchName, long cateId, int pageSize, int pageNumber) {
+	 
+	public PagingSearchFilterProduct(String searchName, long cateId, Status status, int pageSize, int pageNumber) {
 		 
-		this.searchName = searchName;
+		this.keyword = searchName;
 		this.cateId = cateId;
+		this.status = status;
 		this.pageSize = pageSize;
-		this.pageNumber = pageNumber;
+		this.page = pageNumber;
 	}
-	public String getSearchName() {
-		return searchName;
+
+	 
+	public String getKeyword() {
+		return keyword;
 	}
-	public void setSearchName(String searchName) {
-		this.searchName = searchName;
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
+
 	public long getCateId() {
 		return cateId;
 	}
@@ -36,11 +45,29 @@ public class PagingSearchFilterProduct{
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
-	public int getPageNumber() {
-		return pageNumber;
+	 
+	public int getPage() {
+		if(page == 0 ) {
+			return 0;
+		}
+		return page - 1;
 	}
-	public void setPageNumber(int pageNumber) {
-		this.pageNumber = pageNumber;
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "PagingSearchFilterProduct [keyword=" + keyword + ", cateId=" + cateId + ", status=" + status
+				+ ", pageSize=" + pageSize + ", pageNumber=" + page + "]";
 	}
 	
 

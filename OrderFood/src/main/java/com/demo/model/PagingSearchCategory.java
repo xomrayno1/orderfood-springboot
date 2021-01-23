@@ -3,7 +3,7 @@ package com.demo.model;
 public class PagingSearchCategory {
 	
 	private  String searchName;
-	private   int pageSize;
+	private  int pageSize;
 	private  int pageNumber;
 	
 	
