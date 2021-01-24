@@ -7,6 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import com.demo.entity.Products;
+import com.demo.utils.Status;
 
 @Repository
 public interface ProductRepository  extends PagingAndSortingRepository<Products, Long>,
@@ -16,4 +17,5 @@ public interface ProductRepository  extends PagingAndSortingRepository<Products,
 	List<Products> findAll();
 	
 	Products findByName(String name);
+	Products findByStatus(Status status);
 }

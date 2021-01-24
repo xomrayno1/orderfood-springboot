@@ -21,12 +21,26 @@ public class OrderDetail {
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Products products;
+	@ManyToOne
+	@JoinColumn(name = "order_id")
+	private Orders orders;
 	private int quantity;
 
 	@Temporal(TemporalType.DATE)
 	private Date createDate;
 	@Temporal(TemporalType.DATE)
 	private Date updateDate;
+	
+	
+	
+	public OrderDetail() {
+		 
+	}
+	public OrderDetail(BigDecimal price,Products products, int quantity) {
+		this.price = price;
+		this.products = products;
+		this.quantity = quantity;
+	}
 	public long getId() {
 		return id;
 	}
@@ -62,6 +76,12 @@ public class OrderDetail {
 	}
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+	public Orders getOrders() {
+		return orders;
+	}
+	public void setOrders(Orders orders) {
+		this.orders = orders;
 	}
 	
 	

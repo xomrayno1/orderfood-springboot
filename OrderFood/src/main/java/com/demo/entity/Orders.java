@@ -2,11 +2,13 @@ package com.demo.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,6 +22,8 @@ public class Orders {
 	private Date createDate;
 	@Temporal(TemporalType.DATE)
 	private Date updateDate;
+	@OneToMany(mappedBy = "orders")
+	private List<OrderDetail> orderDetails;
 	
 	public long getId() {
 		return id;
@@ -44,6 +48,12 @@ public class Orders {
 	}
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+	public List<OrderDetail> getOrderDetails() {
+		return orderDetails;
+	}
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
+		this.orderDetails = orderDetails;
 	}
 	
 	

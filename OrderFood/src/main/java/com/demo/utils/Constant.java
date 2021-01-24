@@ -7,4 +7,5 @@ public class Constant {
 	public final static String REGEX_USERNAME = "\\b[A-Za-z\\d_-]{6,16}\\b";
 	public final static String REGEX_PRICE = "\\d{4,12}$";
 	public final static String REGEX_NAME_PRODUCT = "^[A-Z a-z\\dÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ]{2,16}$";
+	public final static String SESSION_INVOICE = "invoice";
 }

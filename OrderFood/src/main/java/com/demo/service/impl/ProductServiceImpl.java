@@ -21,6 +21,7 @@ import com.demo.model.entity.ProductSpecification;
 import com.demo.repository.ProductRepository;
 import com.demo.service.ProductService;
 import com.demo.utils.Constant;
+import com.demo.utils.Status;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -99,6 +100,11 @@ public class ProductServiceImpl implements ProductService{
 		// TODO Auto-generated method stub
 		return productRepo.findAll(new ProductSpecification(psfp.getKeyword(), psfp.getCateId(),psfp.getStatus()),
 									PageRequest.of(psfp.getPage(), psfp.getPageSize()));
+	}
+	@Override
+	public Products getByStatus(Status status) {
+		// TODO Auto-generated method stub
+		return productRepo.findByStatus(status);
 	}
 	
 

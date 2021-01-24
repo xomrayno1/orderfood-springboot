@@ -10,9 +10,6 @@ public class HomeController {
 		return "index/index";
 	}
 	
-	@GetMapping(value = {"/order"})
-	public String order() {
-		return "order/order";
-	}
+	 
  
 }

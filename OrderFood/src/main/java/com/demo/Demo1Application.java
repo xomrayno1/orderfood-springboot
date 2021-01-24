@@ -1,14 +1,8 @@
 package com.demo;
 
-import java.math.BigDecimal;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.demo.utils.Constant;
 
 @SpringBootApplication
 public class Demo1Application  implements CommandLineRunner{
