@@ -30,7 +30,7 @@
       			</div>
       			<div class="col-sm-6 right">
       				<button class="btn btn-outline-primary  btn-view-invoice"> 
-      					Hoá đơn   <span id="count_item_invoice" class="badge badge-light" style="margin-left: 2px">
+      					Hóa đơn   <span id="count_item_invoice" class="badge badge-light" style="margin-left: 2px">
       												0
       								</span>
       				</button>
@@ -74,10 +74,10 @@
 				      	<img alt="" width="70px" height="50px" th:src="@{ ${item.images}}">
 				       </td>
 				      <td th:text="${item.name}"/>
-				      <td th:inline="text" >[[${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ </td>
+				      <td th:inline="text" >[[${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}]] VND </td>
 					  <td>
 					  	<button class="btn btn-primary btn_add_item"  >
-					  		Đặt
+					  		Chọn
 					  	</button>
 					  </td>
 				    </tr>
@@ -138,7 +138,7 @@
 		  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLongTitle">Hoá đơn</h5>
+		        <h5 class="modal-title" id="exampleModalLongTitle">Hóa đơn</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -172,7 +172,7 @@
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Chọn số lượng</h5>
+		        <h5 class="modal-title" id="exampleModalLabel">Chọn sản phẩm</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -221,6 +221,7 @@
 			contentType:"application/json; charset=utf-8",
 			data : JSON.stringify(data),
 			success : function(response){
+				$("#count_item_invoice").html(response);
 			},
 			error : function(error){
 				alert(error)

@@ -1,5 +1,6 @@
 package com.demo.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-public class OrderDetail {
+public class OrderDetail implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -82,6 +83,11 @@ public class OrderDetail {
 	}
 	public void setOrders(Orders orders) {
 		this.orders = orders;
+	}
+	@Override
+	public String toString() {
+		return "OrderDetail [id=" + id + ", price=" + price + ", products=" + products + ", orders=" + orders
+				+ ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + "]";
 	}
 	
 	
