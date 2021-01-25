@@ -1,9 +1,9 @@
 package com.demo.api;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,44 +15,43 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.demo.entity.OrderDetail;
 import com.demo.entity.Orders;
 import com.demo.entity.Products;
+import com.demo.exception.ResourceNotFoundException;
 import com.demo.model.CartItemModel;
+import com.demo.model.OrderReponse;
 import com.demo.service.ProductService;
 import com.demo.utils.Constant;
+import com.demo.utils.ConvertDTO;
 
 @RestController
 @RequestMapping("/api/v1/sells")
-@SessionAttributes(Constant.SESSION_INVOICE)
+ 
 public class SellApiController {
 	@Autowired
 	ProductService productService;
-	@PostMapping(value = "/add", 
-			consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Long> addItemSell(
-			@RequestBody CartItemModel cartItemModel,
-			HttpSession session){
-		System.out.println(cartItemModel);
-		 
-		Object object =  session.getAttribute(Constant.SESSION_INVOICE);
+	
+	@PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Long> addItemSell(@RequestBody CartItemModel cartItemModel
+				,HttpSession session ){
+		 System.out.println(cartItemModel);
 		Products products = productService.getById(cartItemModel.getId());
+		Object  object= session.getAttribute(Constant.SESSION_INVOICE);
 		Orders orders = null;
 		if(object == null) {
 			 orders = new Orders();
 			 List<OrderDetail> list  = new ArrayList<>();
 			 list.add(new OrderDetail(products.getPrice(),products,cartItemModel.getCount()));
 			 orders.setOrderDetails(list);
-		 
 		}else {
 			 orders = (Orders) object; 
 			 boolean flag = true;
 			 for (OrderDetail item: orders.getOrderDetails()) {
-				 if(item.getId() == cartItemModel.getId()) {
-					  item.setQuantity(cartItemModel.getCount()+ item.getQuantity()) ;
+				 if(item.getProducts().getId() == cartItemModel.getId()) {
+					 item.setQuantity(cartItemModel.getCount()+ item.getQuantity()) ;
+					 item.setSubPrice(item.getPrice().multiply(new BigDecimal(item.getQuantity()))); 
 					 flag = false;
 					 break;
 				 }
@@ -60,22 +59,61 @@ public class SellApiController {
 			 if(flag) {
 				 orders.getOrderDetails().add(new OrderDetail(products.getPrice(), products, cartItemModel.getCount()));
 			 }	  
-			 
 		}
-		 session.setAttribute(Constant.SESSION_INVOICE, orders);
-		 showInvoice1(session);
+		System.out.println(orders);
+		session.setAttribute(Constant.SESSION_INVOICE, orders);
 		return new ResponseEntity<Long>(Long.valueOf(orders.getOrderDetails().size()),HttpStatus.OK);
 		  
 	}
-// 
+ 
 	@GetMapping("/invoice")
-	public  ResponseEntity<Orders> showInvoice(HttpServletRequest request){
-		Orders orders = (Orders) request.getSession().getAttribute(Constant.SESSION_INVOICE);
-		return new ResponseEntity<Orders>(orders, HttpStatus.OK);
-	}
-	public  void showInvoice1(HttpSession session){
+	public  ResponseEntity<OrderReponse>  getInvoice(
+			 HttpSession session){
 		Orders orders = (Orders) session.getAttribute(Constant.SESSION_INVOICE);
-		System.out.println(orders);
+		 
+		OrderReponse orderReponse = ConvertDTO.convertOrderToDTO(orders);
+		return new ResponseEntity<OrderReponse>(orderReponse, HttpStatus.OK);
+	}
+	
+	@GetMapping("/count-item")
+	public  ResponseEntity<Integer>  getCountItem(
+			 HttpSession session){
+		Orders orders = (Orders) session.getAttribute(Constant.SESSION_INVOICE);
+		 if(orders != null) {
+			 return new ResponseEntity<Integer>(orders.getOrderDetails().size(), HttpStatus.OK);
+		 }
+		return new ResponseEntity<Integer>(0, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/delete-item",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public  ResponseEntity<String>  deleteItem(@RequestBody Integer[] integers,
+			 HttpSession session){
+		Orders orders = (Orders) session.getAttribute(Constant.SESSION_INVOICE);
+		 System.out.println(integers);
+		if(orders != null) {
+			if(orders.getOrderDetails() != null) {
+				for(OrderDetail item : orders.getOrderDetails()) {
+					for(Integer integer : integers) {
+						if(item.getProducts().getId() == integer) {
+							orders.getOrderDetails().remove(item);
+							// di sua doi noi dung trong list 
+							
+							break;
+						}
+					}
+				}
+ 
+			}
+			session.setAttribute(Constant.SESSION_INVOICE, orders);
+			return new ResponseEntity<String>("Xoá thành công", HttpStatus.OK);
+		}else {
+			throw new ResourceNotFoundException("source not found");
+		}
+		
+		  
+		 
 	}
 	 
 }

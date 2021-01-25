@@ -144,23 +144,45 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		       <table class="table" id="tb">
+		      	 
+		       <table class="table table-borderless" id="tb">
 				  <thead>
 				    <tr>
-				      <th scope="col">#</th>
-				      <th scope="col">Tên</th>
-				      <th scope="col">Giá</th>
-				      <th scope="col">Số lượng</th>
-				      <th scope="col">Thành tiền</th>
+				      <th class="text-center"   scope="col">
+				      	<input type="checkbox" id="tickAllItem">
+				      </th>
+				      <th   scope="col">#</th>
+				      <th   scope="col">Tên</th>
+				      <th 	scope="col">Giá</th>
+				      <th   scope="col">Số lượng</th>
+				      <th  	scope="col">Thành tiền</th>
+				      
 				    </tr>
 				  </thead>
 				  <tbody>
 				  </tbody>
+				  <thead>
+				  	<tr>
+				  		<td colspan="4" style="color: blue">Tổng tiền :</td>
+				  		<td >100000</td>
+				  	</tr>
+				  </thead>
 				</table>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary">Save changes</button>
+		      <div class="btn-group">
+				  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				     Tác vụ
+				  </button>
+				  <div class="dropdown-menu">
+				  	<a class="dropdown-item" id="update-item" href="#">Cập nhật</a>
+				    <a class="dropdown-item" id="remove-item"	href="#">Xoá</a>
+				    <a class="dropdown-item" id="cancel-invoice"	href="#">Huỷ đơn</a>
+				  </div>
+				</div> 
+		      	<button type="button" class="btn btn-primary">Thanh toán</button>
+		       
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
 		      </div>
 		    </div>
 		  </div>
@@ -178,7 +200,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <form id>
+		        <form >
 		          <div class="form-group">
 		            <label for="recipient-name" class="col-form-label">Số lượng :</label>
 		            <input type="number"   value="1" min="1" max="9"  class="form-control" id="count_item">
@@ -228,17 +250,77 @@
 			}
 		});
 	});
-	
+	//showInvoice();
+	$(".btn-view-invoice").click(showInvoice);
 	function showInvoice(){
-		
+		$.ajax({
+			method : 'Get',
+			url : '/api/v1/sells/invoice',
+			success : function(response){
+				console.log(response);
+				if(response.orderDetails != null){
+					var tableHTML = $("#modalInvoice #tb tbody");
+					tableHTML.html('');
+					var html ;
+					for(var i = 0 ; i < response.orderDetails.length ;i++){
+						html += '<tr>';
+						html +=		'<td  class="text-center"><input class="cbPro"	style="width : 50px" type="checkbox" value="'+response.orderDetails[i].proId+'" 	/></td>';
+						html +=		'<td>'+(i+1)+'</td>';
+						html +=		'<td>'+response.orderDetails[i].proName+'</td>';
+						html +=		'<td>'+response.orderDetails[i].price+'</td>';
+						html +=		'<td><input	style="width : 50px"	  type="text" value="'+response.orderDetails[i].quantity+'"	/></td>';
+						html +=		'<td>'+response.orderDetails[i].subPrice+'</td>';
+						html +=	'</tr>';
+					}	
+					tableHTML.append(html);
+				}
+				 
+			}
+		})	
 	}
+	 //load count item invoice
+	 
+	 $(document).ready(function(){
+			$.ajax({
+				method : 'get',
+				url : '/api/v1/sells/count-item',
+				success : function(response){
+					$("#count_item_invoice").html(response);
+				},
+				error : function(error){
+					alert(error)
+				}
+			});
+	 });
+	 //remove item
+	 $("#remove-item").click(function(){
+		 var data = new Array();
+		 var idd = document.getElementsByClassName("cbPro");
+		 for(var i = 0 ; i < idd.length; i++){
+			 if(idd[i].checked){
+				 data.push(idd[i].value);
+			 }
+		 }
+		  console.log(data);
+		 $.ajax({
+			method : "POST",
+			url : "/api/v1/sells/delete-item",
+			contentType:"application/json; charset=utf-8",
+			data : JSON.stringify(data) ,
+			success : function(response){
+				console.log(response);
+			}
+		 });
+		  
+	 });
+	 
+	
  </script>
   </div>
   <!-- Bootstrap core JavaScript -->
   <script th:src="@{/js/jquery.min.js}"></script>
   <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-
-  <!-- Menu Toggle Script -->
+ 
   <script>
    
   $("#sidebar_sell").addClass("select").siblings().removeClass("select");

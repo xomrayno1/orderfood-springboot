@@ -10,7 +10,8 @@ import com.demo.entity.Products;
 
 public class OrderDetailResponse {
 	private long id;
-	private BigDecimal price;	 
+	private BigDecimal price;	
+	private BigDecimal subPrice;
 	private	long proId;
 	private String proName;
 	private long orderId;
@@ -50,6 +51,12 @@ public class OrderDetailResponse {
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	public BigDecimal getSubPrice() {
+		return subPrice;
+	}
+	public void setSubPrice(BigDecimal subPrice) {
+		this.subPrice = subPrice;
 	}
 	
 	

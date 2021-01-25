@@ -26,7 +26,7 @@ public class OrderDetail implements Serializable{
 	@JoinColumn(name = "order_id")
 	private Orders orders;
 	private int quantity;
-
+	private BigDecimal subPrice;
 	@Temporal(TemporalType.DATE)
 	private Date createDate;
 	@Temporal(TemporalType.DATE)
@@ -49,6 +49,7 @@ public class OrderDetail implements Serializable{
 		this.id = id;
 	}
 	public BigDecimal getPrice() {
+		 
 		return price;
 	}
 	public void setPrice(BigDecimal price) {
@@ -84,10 +85,14 @@ public class OrderDetail implements Serializable{
 	public void setOrders(Orders orders) {
 		this.orders = orders;
 	}
-	@Override
-	public String toString() {
-		return "OrderDetail [id=" + id + ", price=" + price + ", products=" + products + ", orders=" + orders
-				+ ", quantity=" + quantity + ", createDate=" + createDate + ", updateDate=" + updateDate + "]";
+	 
+	public BigDecimal getSubPrice() {
+	 
+		this.subPrice = price.multiply(new BigDecimal(quantity));
+		return subPrice;
+	}
+	public void setSubPrice(BigDecimal subPrice) {
+		this.subPrice = subPrice;
 	}
 	
 	

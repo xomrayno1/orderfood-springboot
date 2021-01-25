@@ -5,8 +5,9 @@ import java.util.List;
 
 public class OrderReponse {
 	private long id;
-	private BigDecimal totalPrice;
+	private BigDecimal totalPrice ;
 	private List<OrderDetailResponse> orderDetails;
+	
 	public long getId() {
 		return id;
 	}
@@ -14,7 +15,7 @@ public class OrderReponse {
 		this.id = id;
 	}
 	public BigDecimal getTotalPrice() {
-		orderDetails.forEach( item -> totalPrice =  totalPrice.add(item.getPrice()));
+ 
 		return totalPrice;
 	}
 	public void setTotalPrice(BigDecimal totalPrice) {
