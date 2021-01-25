@@ -2,6 +2,7 @@ package com.demo.api;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -70,7 +71,6 @@ public class SellApiController {
 	public  ResponseEntity<OrderReponse>  getInvoice(
 			 HttpSession session){
 		Orders orders = (Orders) session.getAttribute(Constant.SESSION_INVOICE);
-		 
 		OrderReponse orderReponse = ConvertDTO.convertOrderToDTO(orders);
 		return new ResponseEntity<OrderReponse>(orderReponse, HttpStatus.OK);
 	}
@@ -94,12 +94,13 @@ public class SellApiController {
 		 System.out.println(integers);
 		if(orders != null) {
 			if(orders.getOrderDetails() != null) {
-				for(OrderDetail item : orders.getOrderDetails()) {
+				Iterator<OrderDetail> iterator = orders.getOrderDetails().iterator();
+				OrderDetail item = null;
+				while(iterator.hasNext()) {
+					item = iterator.next();
 					for(Integer integer : integers) {
 						if(item.getProducts().getId() == integer) {
-							orders.getOrderDetails().remove(item);
-							// di sua doi noi dung trong list 
-							
+							iterator.remove();
 							break;
 						}
 					}
@@ -107,6 +108,7 @@ public class SellApiController {
  
 			}
 			session.setAttribute(Constant.SESSION_INVOICE, orders);
+			System.out.println(orders.getOrderDetails().size());
 			return new ResponseEntity<String>("Xoá thành công", HttpStatus.OK);
 		}else {
 			throw new ResourceNotFoundException("source not found");

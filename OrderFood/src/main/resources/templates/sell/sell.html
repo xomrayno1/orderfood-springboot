@@ -250,8 +250,9 @@
 			}
 		});
 	});
-	//showInvoice();
+	 
 	$(".btn-view-invoice").click(showInvoice);
+	
 	function showInvoice(){
 		$.ajax({
 			method : 'Get',
@@ -279,19 +280,19 @@
 		})	
 	}
 	 //load count item invoice
-	 
-	 $(document).ready(function(){
-			$.ajax({
-				method : 'get',
-				url : '/api/v1/sells/count-item',
-				success : function(response){
-					$("#count_item_invoice").html(response);
-				},
-				error : function(error){
-					alert(error)
-				}
-			});
-	 });
+			 showCountItemInvoice();
+			function showCountItemInvoice(){
+				$.ajax({
+					method : 'get',
+					url : '/api/v1/sells/count-item',
+					success : function(response){
+						$("#count_item_invoice").html(response);
+					},
+					error : function(error){
+						alert(error)
+					}
+				});
+			}
 	 //remove item
 	 $("#remove-item").click(function(){
 		 var data = new Array();
@@ -308,7 +309,9 @@
 			contentType:"application/json; charset=utf-8",
 			data : JSON.stringify(data) ,
 			success : function(response){
-				console.log(response);
+				showInvoice();
+				showCountItemInvoice();
+				 
 			}
 		 });
 		  
