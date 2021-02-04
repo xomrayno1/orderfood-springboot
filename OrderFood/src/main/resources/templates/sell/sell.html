@@ -262,7 +262,7 @@
 				if(response.orderDetails != null){
 					var tableHTML = $("#modalInvoice #tb tbody");
 					tableHTML.html('');
-					var html ;
+					var html ;	
 					for(var i = 0 ; i < response.orderDetails.length ;i++){
 						html += '<tr>';
 						html +=		'<td  class="text-center"><input class="cbPro"	style="width : 50px" type="checkbox" value="'+response.orderDetails[i].proId+'" 	/></td>';
