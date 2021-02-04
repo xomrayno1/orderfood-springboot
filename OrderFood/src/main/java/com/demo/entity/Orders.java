@@ -13,8 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.context.annotation.Scope;
-
 @Entity
 public class Orders implements Serializable{
 	@Id
@@ -35,7 +33,12 @@ public class Orders implements Serializable{
 		this.id = id;
 	}
 	public BigDecimal getTotalPrice() {
- 
+		totalPrice = new BigDecimal(0);
+		if(orderDetails != null) {
+			orderDetails.forEach(item->{
+				totalPrice = totalPrice.add(item.getSubPrice());
+			});
+		} 
 		return totalPrice;
 	}
 	public void setTotalPrice(BigDecimal totalPrice) {
@@ -54,7 +57,7 @@ public class Orders implements Serializable{
 		this.updateDate = updateDate;
 	}
 	public List<OrderDetail> getOrderDetails() {
-	 
+		 
 		return orderDetails;
 	}
 	public void setOrderDetails(List<OrderDetail> orderDetails) {

@@ -163,8 +163,8 @@
 				  </tbody>
 				  <thead>
 				  	<tr>
-				  		<td colspan="4" style="color: blue">Tổng tiền :</td>
-				  		<td >100000</td>
+				  		<td colspan="5" style="color: blue">Tổng tiền :</td>
+				  		<td  id="totalPrice__"></td>
 				  	</tr>
 				  </thead>
 				</table>
@@ -258,29 +258,31 @@
 			method : 'Get',
 			url : '/api/v1/sells/invoice',
 			success : function(response){
-				console.log(response);
-				if(response.orderDetails != null){
-					var tableHTML = $("#modalInvoice #tb tbody");
-					tableHTML.html('');
-					var html ;	
-					for(var i = 0 ; i < response.orderDetails.length ;i++){
-						html += '<tr>';
-						html +=		'<td  class="text-center"><input class="cbPro"	style="width : 50px" type="checkbox" value="'+response.orderDetails[i].proId+'" 	/></td>';
-						html +=		'<td>'+(i+1)+'</td>';
-						html +=		'<td>'+response.orderDetails[i].proName+'</td>';
-						html +=		'<td>'+response.orderDetails[i].price+'</td>';
-						html +=		'<td><input	style="width : 50px"	  type="text" value="'+response.orderDetails[i].quantity+'"	/></td>';
-						html +=		'<td>'+response.orderDetails[i].subPrice+'</td>';
-						html +=	'</tr>';
-					}	
-					tableHTML.append(html);
+				var tableHTML = $("#modalInvoice #tb tbody");
+				tableHTML.html('');
+				if(response != null){
+					if(response.orderDetails != null){
+						var html ;
+						for(var i = 0 ; i < response.orderDetails.length ;i++){
+							html += '<tr>';
+							html +=		'<td  class="text-center"><input class="cbPro"	style="width : 50px" type="checkbox" value="'+response.orderDetails[i].proId+'" 	/></td>';
+							html +=		'<td>'+(i+1)+'</td>';
+							html +=		'<td>'+response.orderDetails[i].proName+'</td>';
+							html +=		'<td>'+response.orderDetails[i].price+'</td>';
+							html +=		'<td><input	style="width : 50px" class="quantity_item__"  	  type="text" value="'+response.orderDetails[i].quantity+'"	/></td>';
+							html +=		'<td>'+response.orderDetails[i].subPrice+'</td>';
+							html +=	'</tr>';
+						}	
+						tableHTML.append(html);
+					}
+					$('#totalPrice__').html(response.totalPrice +   '  VND' );
 				}
-				 
+				$('#tickAllItem').prop('checked',false); 
 			}
 		})	
 	}
 	 //load count item invoice
-			 showCountItemInvoice();
+			showCountItemInvoice();
 			function showCountItemInvoice(){
 				$.ajax({
 					method : 'get',
@@ -293,6 +295,45 @@
 					}
 				});
 			}
+			
+		//cancel- invoice
+		$('#cancel-invoice').click(function(){
+			$.ajax({
+				method : "GET",
+				url : "/api/v1/sells/cancel",
+				success : function(response){
+					showInvoice();
+					showCountItemInvoice();
+				}
+			 });
+		});
+	$('#tickAllItem').click(function(){
+ 		$('.cbPro').prop('checked', $('#tickAllItem').is(':checked') == true ? true : false);
+	});
+	//update-item
+		$('#update-item').click(function(){	 
+			var array = [];
+			 $('#tb tbody tr').each(function(index,element){
+				 var data = {};
+			 	 var id = $(this).find('.cbPro').val();
+			 	 var quantity = $(this).find('.quantity_item__').val();
+			 	 console.log(id+"---"+quantity);
+			 	 data.id = id;
+			 	 data.quantity = quantity;
+			 	 array.push(data);
+			 });
+				console.log(array);
+				$.ajax({
+					method : 'put',
+					url :  '/api/v1/sells',
+					contentType:"application/json; charset=utf-8",
+					data : JSON.stringify(array),
+					success : function(){
+						console.log("update success");
+						showInvoice();
+					}
+				});
+		});
 	 //remove item
 	 $("#remove-item").click(function(){
 		 var data = new Array();
@@ -311,11 +352,11 @@
 			success : function(response){
 				showInvoice();
 				showCountItemInvoice();
-				 
 			}
 		 });
 		  
 	 });
+	 
 	 
 	
  </script>

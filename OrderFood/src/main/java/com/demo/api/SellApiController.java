@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import com.demo.entity.Products;
 import com.demo.exception.ResourceNotFoundException;
 import com.demo.model.CartItemModel;
 import com.demo.model.OrderReponse;
+import com.demo.model.UpdateItemInvoice;
 import com.demo.service.ProductService;
 import com.demo.utils.Constant;
 import com.demo.utils.ConvertDTO;
@@ -37,7 +39,7 @@ public class SellApiController {
 	@PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Long> addItemSell(@RequestBody CartItemModel cartItemModel
 				,HttpSession session ){
-		 System.out.println(cartItemModel);
+		 
 		Products products = productService.getById(cartItemModel.getId());
 		Object  object= session.getAttribute(Constant.SESSION_INVOICE);
 		Orders orders = null;
@@ -61,12 +63,32 @@ public class SellApiController {
 				 orders.getOrderDetails().add(new OrderDetail(products.getPrice(), products, cartItemModel.getCount()));
 			 }	  
 		}
-		System.out.println(orders);
+	 
 		session.setAttribute(Constant.SESSION_INVOICE, orders);
 		return new ResponseEntity<Long>(Long.valueOf(orders.getOrderDetails().size()),HttpStatus.OK);
 		  
 	}
- 
+	@PutMapping 
+	public  ResponseEntity<OrderReponse>  updateInvoice(
+			 HttpSession session,@RequestBody UpdateItemInvoice[] updateItemInvoice){
+		Orders orders = (Orders) session.getAttribute(Constant.SESSION_INVOICE);
+		
+		if(orders != null) {
+			if(!orders.getOrderDetails().isEmpty()) {
+				for(UpdateItemInvoice itemInvoice : updateItemInvoice){
+					for(OrderDetail item : orders.getOrderDetails()) {
+						if(item.getProducts().getId() == itemInvoice.getId()) {
+							item.setQuantity(itemInvoice.getQuantity());
+							break;
+						}
+					}	 
+				}			
+			}
+		}
+		
+		OrderReponse orderReponse = ConvertDTO.convertOrderToDTO(orders);
+		return new ResponseEntity<OrderReponse>(orderReponse, HttpStatus.OK);
+	}
 	@GetMapping("/invoice")
 	public  ResponseEntity<OrderReponse>  getInvoice(
 			 HttpSession session){
@@ -84,14 +106,23 @@ public class SellApiController {
 		 }
 		return new ResponseEntity<Integer>(0, HttpStatus.OK);
 	}
-	
+	@GetMapping("/cancel")
+	public  ResponseEntity<Void>  cancel(
+			 HttpSession session){
+		Orders orders = (Orders) session.getAttribute(Constant.SESSION_INVOICE);
+		if(orders != null) {
+			session.removeAttribute(Constant.SESSION_INVOICE);
+		}
+		 
+		return new ResponseEntity<Void>( HttpStatus.NO_CONTENT);
+	}
 	@PostMapping(value = "/delete-item",
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public  ResponseEntity<String>  deleteItem(@RequestBody Integer[] integers,
+	public  ResponseEntity<Object>  deleteItem(@RequestBody Integer[] integers,
 			 HttpSession session){
 		Orders orders = (Orders) session.getAttribute(Constant.SESSION_INVOICE);
-		 System.out.println(integers);
+		 
 		if(orders != null) {
 			if(orders.getOrderDetails() != null) {
 				Iterator<OrderDetail> iterator = orders.getOrderDetails().iterator();
@@ -109,7 +140,7 @@ public class SellApiController {
 			}
 			session.setAttribute(Constant.SESSION_INVOICE, orders);
 			System.out.println(orders.getOrderDetails().size());
-			return new ResponseEntity<String>("Xoá thành công", HttpStatus.OK);
+			return new ResponseEntity<Object>(orders, HttpStatus.OK);
 		}else {
 			throw new ResourceNotFoundException("source not found");
 		}
